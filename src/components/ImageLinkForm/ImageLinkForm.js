@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ImageLinkForm = () =>{
+const ImageLinkForm = ({ onInputChange, onButtonSubmit }) =>{
     return (
         <div>
             <p className="text-lg">
@@ -8,8 +8,8 @@ const ImageLinkForm = () =>{
             </p>
             <div className="flex justify-center">
                 <div className="px-8 py-4 rounded shadow-xl bg-blue-500 flex justify-center w-3/4">
-                    <input className="border mx-2 rounded w-3/4" type="text"/>
-                    <button className="w-1/4 bg-green-500 hover:bg-blue-700 rounded">Detect</button>
+                    <input className="border mx-2 rounded w-3/4" type="text" onChange={onInputChange}/>
+                    <button className="w-1/4 bg-green-500 hover:bg-blue-700 rounded" onClick={onButtonSubmit}>Detect</button>
                 </div>
             </div>
         </div>
