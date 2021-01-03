@@ -1,11 +1,7 @@
 import React from 'react';
 import HistoryItem from './HistoryItem';
 
-const History = ({ historyList }) => {
-
-    // const deleteHistory = (i) => {
-    //     console.log(historyList[i])
-    // }
+const History = ({ historyList, deleteHistory }) => {
 
     return(
         <div className="flex justify-center flex-wrap">
@@ -17,7 +13,7 @@ const History = ({ historyList }) => {
                             <HistoryItem
                             key={i}
                             prevURL={historyList}
-                            // deleteHistory={deleteHistory(i)}
+                            // deleteHistory={deleteHistory(historyList.key)}
                         />)
                     })
                 }

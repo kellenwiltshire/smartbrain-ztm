@@ -41,11 +41,15 @@ class App extends Component {
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
+
     return {
       leftCol: clarifaiFace.left_col * width,
       topRow: clarifaiFace.top_row * height,
       rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
+      bottomRow: height - (clarifaiFace.bottom_row * height), 
+
+      
+      height: height + 10
     }
   }
 
@@ -75,6 +79,12 @@ class App extends Component {
 
   }
 
+  // deleteHistory = (i) => {
+  //   const newArr = [...this.state.historyList];
+  //   newArr.splice(i, 1);
+  //   this.setState({historylist: newArr});
+  // }
+
   render(){
     return (
       <div className="App">
@@ -86,7 +96,7 @@ class App extends Component {
         <Rank />
         <FaceRecognition box={this.state.box} imageURL={this.state.imageURL}/>
         <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
-        <History historyList={this.state.historyList} />
+        <History historyList={this.state.historyList}/>
       </div>
     );
   }
