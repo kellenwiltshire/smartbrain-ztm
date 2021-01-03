@@ -1,6 +1,7 @@
 import React from 'react'
 
-const ImageLinkForm = ({ onInputChange, onButtonSubmit }) =>{
+const ImageLinkForm = ({ onInputChange, onButtonSubmit}) =>{
+
     return (
         <div>
             <p className="text-lg">

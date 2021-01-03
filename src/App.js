@@ -4,6 +4,7 @@ import Logo from './components/Logo/Logo'
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
 import Rank from './components/Rank/Rank'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
+import History from './components/History/History'
 import Particles from 'react-particles-js';
 import { React, Component } from 'react';
 import Clarifai from 'clarifai';
@@ -16,7 +17,7 @@ const app = new Clarifai.App({
 const particlesOptions = {
     particles: {
       number: {
-        value: 50,
+        value: 30,
         density: {
           enable: true,
           value_area: 800
@@ -29,8 +30,28 @@ class App extends Component {
     super();
     this.state = {
       input: '',
-      imageURL: ''
+      imageURL: '',
+      box: {},
+      historyList: [],
     }
+  }
+
+  calculateFaceLocation = (data) => {
+    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById('inputimage');
+    const width = Number(image.width);
+    const height = Number(image.height);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - (clarifaiFace.right_col * width),
+      bottomRow: height - (clarifaiFace.bottom_row * height)
+    }
+  }
+
+  displayFaceBox = (box) => {
+    console.log(box);
+    this.setState({box: box})
   }
 
   onInputChange = (event) => {
@@ -38,18 +59,20 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
-    this.setState({imageURL: this.state.input})
-    app.models.predict(
-      Clarifai.FACE_DETECT_MODEL, 
-      this.state.input)
-    .then(
-      function(response){
-        console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
-      },
-      function(err){
 
-      }
-    );
+    if(this.state.input !== ''){
+      this.setState({
+        imageURL: this.state.input,
+        historyList: [this.state.input, ...this.state.historyList],
+        })
+  
+      app.models.predict(
+        Clarifai.FACE_DETECT_MODEL, 
+        this.state.input)
+      .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
+      .catch(err => console.log(err));
+    }
+
   }
 
   render(){
@@ -61,8 +84,9 @@ class App extends Component {
         <Navigation />
         <Logo />
         <Rank />
+        <FaceRecognition box={this.state.box} imageURL={this.state.imageURL}/>
         <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
-        <FaceRecognition imageURL={this.state.imageURL}/>
+        <History historyList={this.state.historyList} />
       </div>
     );
   }
