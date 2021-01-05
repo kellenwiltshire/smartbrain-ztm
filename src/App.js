@@ -84,7 +84,7 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({isSignedIn: false})
+      this.setState({isSignedIn: false});
     } else if (route === 'home'){
       this.setState({isSignedIn: true})
     }
@@ -112,7 +112,7 @@ class App extends Component {
               <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
               <History historyList={historyList} deleteHistory={this.deleteHistory} />
             </div>
-          : ( route === 'signin'
+          : ( route === 'signin' || route === 'signout'
             ? <SignIn onRouteChange={this.onRouteChange} />
             : <Register onRouteChange={this.onRouteChange} />
           )
