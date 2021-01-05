@@ -3,20 +3,17 @@ import HistoryItem from './HistoryItem';
 
 const History = ({ historyList, deleteHistory }) => {
 
-    const deleteWarning = () => {
-        const deleteDialog = document.getElementById('delete');
+    const deleteDialog = document.getElementById('delete');
 
-        if(deleteDialog.style.visibility === 'hidden'){
-            deleteDialog.style.visibility='visible';
-        } else {
-            deleteDialog.style.visibility='hidden';
-        }
+    const deleteWarning = () => {
+        deleteDialog.style.visibility === 'hidden'
+        ? deleteDialog.style.visibility='visible'
+        : deleteDialog.style.visibility='hidden'
     }
     
     const historyDeleted = () => {
         deleteHistory();
 
-        const deleteDialog = document.getElementById('delete');
         deleteDialog.style.visibility='hidden';
     }
 
