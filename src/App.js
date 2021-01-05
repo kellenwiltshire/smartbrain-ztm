@@ -92,13 +92,18 @@ class App extends Component {
     this.setState({route: route})
   }
 
+  deleteHistory = () => {
+    const Arr = [];
+    this.setState({historyList: Arr});
+  }
+
   render(){
     const { isSignedIn, imageURL, route, box, historyList } = this.state;
     return (
-      <div className="App">
-        <Particles className="fixed inset-0 -z-1 bg-blue-900"
+      <div className="App bg-blue-900">
+        {/* <Particles className="fixed inset-0 -z-1 bg-blue-900"
                 params={particlesOptions}
-              />
+              /> */}
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
         { route === 'home'
           ? <div>
@@ -106,7 +111,7 @@ class App extends Component {
               <Rank />
               <FaceRecognition box={box} imageURL={imageURL}/>
               <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
-              <History historyList={historyList}/>
+              <History historyList={historyList} deleteHistory={this.deleteHistory} />
             </div>
           : ( route === 'signin'
             ? <SignIn onRouteChange={this.onRouteChange} />
