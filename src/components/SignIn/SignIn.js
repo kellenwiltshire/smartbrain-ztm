@@ -17,11 +17,15 @@ class SignIn extends React.Component {
     }
 
     onSubmitSignIn = () => {
+
+        const email = this.state.signInEmail;
+        const lcemail = email.toLowerCase();
+
         fetch('http://localhost:3000/signin', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                email: this.state.signInEmail,
+                email: lcemail,
                 password: this.state.signInPassword
             })
         })
