@@ -7,7 +7,6 @@ import FaceRecognition from './components/FaceRecognition/FaceRecognition'
 import History from './components/History/History'
 import SignIn from './components/SignIn/SignIn'
 import Register from './components/Register/Register'
-import Particles from 'react-particles-js';
 import { React, Component } from 'react';
 import Clarifai from 'clarifai';
 import { api } from './api/api'
@@ -16,17 +15,14 @@ const app = new Clarifai.App({
   apiKey: api
 });
 
-const particlesOptions = {
-    particles: {
-      number: {
-        value: 30,
-        density: {
-          enable: true,
-          value_area: 800
-        }
-      }
-    }
-  }
+// TODO - Fix Sign In/Register to respond to 'Enter' Button Press
+// TODO - Add Multi Face Detection
+// TODO - Add More Detection Options with drop-down expansion to include more stats available through Clarifai
+// TODO - Add Profile Page that shows User stats and allows Profile Deletion
+// TODO - Add Footer
+// TODO - Login Error Detection and Response
+// TODO - Add Home Route for Nav
+// TODO - Make it Beautiful
 class App extends Component {
   constructor(){
     super();
@@ -131,10 +127,7 @@ class App extends Component {
   render(){
     const { isSignedIn, imageURL, route, box, historyList } = this.state;
     return (
-      <div className="App bg-blue-900">
-        {/* <Particles className="fixed inset-0 -z-1 bg-blue-900"
-                params={particlesOptions}
-              /> */}
+      <div className="App">
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
         { route === 'home'
           ? <div>
