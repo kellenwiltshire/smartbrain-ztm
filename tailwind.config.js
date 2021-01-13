@@ -7,7 +7,8 @@ module.exports = {
     },
     minHeight: {
       '500': '500px',
-      '400': '400px'
+      '400': '400px',
+      '3/4': '75%'
     },
     extend: {
       zIndex:{

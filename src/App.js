@@ -7,6 +7,7 @@ import FaceRecognition from './components/FaceRecognition/FaceRecognition'
 import History from './components/History/History'
 import SignIn from './components/SignIn/SignIn'
 import Register from './components/Register/Register'
+import Stats from './components/Stats/Stats'
 import { React, Component } from 'react';
 import Clarifai from 'clarifai';
 import { api } from './api/api'
@@ -16,7 +17,6 @@ const app = new Clarifai.App({
 });
 
 // TODO - Fix Sign In/Register to respond to 'Enter' Button Press
-// TODO - Add Multi Face Detection
 // TODO - Add More Detection Options with drop-down expansion to include more stats available through Clarifai
 // TODO - Add Profile Page that shows User stats and allows Profile Deletion
 // TODO - Add Footer
@@ -103,13 +103,11 @@ class App extends Component {
             this.setState(Object.assign(this.state.user, {entries: count}))
           })
         }
-        console.log(response);
         let data = response;
+        this.setState({box: [{}]})
         for (let i = 0; i < data.outputs[0].data.regions.length; i++){
           this.displayFaceBox(this.calculateFaceLocation(data.outputs[0].data.regions[i]))
         }
-        console.log('BOX ARRAY: ', this.state.box)
-        // this.displayFaceBox(this.calculateFaceLocation(response))
       })
       .catch(err => console.log(err));
     } 
@@ -140,6 +138,7 @@ class App extends Component {
               <Logo />
               <Rank name={this.state.user.name} entries={this.state.user.entries}/>
               <FaceRecognition box={box} imageURL={imageURL}/>
+              <Stats box={box}/>
               <ImageLinkForm onInputChange={this.onInputChange} onPictureSubmit={this.onPictureSubmit}/>
               <History historyList={historyList} deleteHistory={this.deleteHistory} />
             </div>
