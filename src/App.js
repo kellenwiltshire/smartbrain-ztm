@@ -29,7 +29,7 @@ class App extends Component {
     this.state = {
       input: '',
       imageURL: '',
-      box: {},
+      box: [{}],
       historyList: [],
       route: 'signin',
       isSignedIn: false,
@@ -54,7 +54,7 @@ class App extends Component {
   })
 
   calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const clarifaiFace = data.region_info.bounding_box;
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
@@ -71,7 +71,7 @@ class App extends Component {
 
   displayFaceBox = (box) => {
     console.log(box);
-    this.setState({box: box})
+    this.setState({box: [box, ...this.state.box]})
   }
 
   onInputChange = (event) => {
@@ -103,7 +103,13 @@ class App extends Component {
             this.setState(Object.assign(this.state.user, {entries: count}))
           })
         }
-        this.displayFaceBox(this.calculateFaceLocation(response))
+        console.log(response);
+        let data = response;
+        for (let i = 0; i < data.outputs[0].data.regions.length; i++){
+          this.displayFaceBox(this.calculateFaceLocation(data.outputs[0].data.regions[i]))
+        }
+        console.log('BOX ARRAY: ', this.state.box)
+        // this.displayFaceBox(this.calculateFaceLocation(response))
       })
       .catch(err => console.log(err));
     } 
