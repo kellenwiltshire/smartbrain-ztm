@@ -104,24 +104,29 @@ class App extends Component {
     .catch(err => console.log(err));
   }
 
-  getCelebrities = (celebFace) => {
+  getCelebrities = (celebFace, i) => {
     const clarifaiCeleb = celebFace.data.concepts[0];
     const celeb = clarifaiCeleb.name;
     const accuracy = clarifaiCeleb.value * 100;
     const roundAccuracy = Math.round(accuracy);
     return{
+      num: i,
       celeb: celeb,
       acc: roundAccuracy
     }    
   }
 
   setCelebrities = (data) => {
-    if(!this.state.celebrities.length){
-      this.setState({celebrities: [data]})
+    if(data.num === 0){
+      if(data.acc > 50) {
+        this.setState({celebrities: [data]})
+      }
     } else {
-      this.setState({celebrities: [data, ...this.state.celebrities]})
+      if(data.acc > 50) {
+        this.setState({celebrities: [data, ...this.state.celebrities]})
+      }
     }
-    
+    console.log(this.state.celebrities)
   }
 
   detectCelebrities = () => {
@@ -131,7 +136,7 @@ class App extends Component {
     .then(response => {
       this.setState({celebrities: [{}]})
       for (let i = 0; i < response.outputs[0].data.regions.length; i++){
-        this.setCelebrities(this.getCelebrities(response.outputs[0].data.regions[i]))
+        this.setCelebrities(this.getCelebrities(response.outputs[0].data.regions[i], i))
       }
     })
     .catch(err => console.log(err));
