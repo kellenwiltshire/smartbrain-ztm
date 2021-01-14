@@ -30,6 +30,7 @@ class App extends Component {
       input: '',
       imageURL: '',
       box: [{}],
+      celebrities: [{}],
       historyList: [],
       route: 'signin',
       isSignedIn: false,
@@ -70,12 +71,70 @@ class App extends Component {
   }
 
   displayFaceBox = (box) => {
-    console.log(box);
     this.setState({box: [box, ...this.state.box]})
   }
 
   onInputChange = (event) => {
     this.setState({input: event.target.value});
+  }
+
+  detectFaces = () => {
+    app.models.predict(
+      Clarifai.FACE_DETECT_MODEL, 
+      this.state.input)
+    .then(response => {
+      if(response){
+        fetch('http://localhost:3000/image', {
+          method: 'put',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+              id: this.state.user.id
+          })
+        })
+        .then(response => response.json())
+        .then(count => {
+          this.setState(Object.assign(this.state.user, {entries: count}))
+        })
+      }
+      this.setState({box: [{}]})
+      for (let i = 0; i < response.outputs[0].data.regions.length; i++){
+        this.displayFaceBox(this.calculateFaceLocation(response.outputs[0].data.regions[i]))
+      }
+    })
+    .catch(err => console.log(err));
+  }
+
+  getCelebrities = (celebFace) => {
+    const clarifaiCeleb = celebFace.data.concepts[0];
+    const celeb = clarifaiCeleb.name;
+    const accuracy = clarifaiCeleb.value * 100;
+    const roundAccuracy = Math.round(accuracy);
+    return{
+      celeb: celeb,
+      acc: roundAccuracy
+    }    
+  }
+
+  setCelebrities = (data) => {
+    if(!this.state.celebrities.length){
+      this.setState({celebrities: [data]})
+    } else {
+      this.setState({celebrities: [data, ...this.state.celebrities]})
+    }
+    
+  }
+
+  detectCelebrities = () => {
+    app.models.predict(
+      Clarifai.CELEBRITY_MODEL, 
+      this.state.input)
+    .then(response => {
+      this.setState({celebrities: [{}]})
+      for (let i = 0; i < response.outputs[0].data.regions.length; i++){
+        this.setCelebrities(this.getCelebrities(response.outputs[0].data.regions[i]))
+      }
+    })
+    .catch(err => console.log(err));
   }
 
   onPictureSubmit = () => {
@@ -85,33 +144,11 @@ class App extends Component {
         imageURL: this.state.input,
         historyList: [this.state.input, ...this.state.historyList],
         })
-  
-    app.models.predict(
-        Clarifai.FACE_DETECT_MODEL, 
-        this.state.input)
-      .then(response => {
-        if(response){
-          fetch('http://localhost:3000/image', {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                id: this.state.user.id
-            })
-          })
-          .then(response => response.json())
-          .then(count => {
-            this.setState(Object.assign(this.state.user, {entries: count}))
-          })
-        }
-        let data = response;
-        this.setState({box: [{}]})
-        for (let i = 0; i < data.outputs[0].data.regions.length; i++){
-          this.displayFaceBox(this.calculateFaceLocation(data.outputs[0].data.regions[i]))
-        }
-      })
-      .catch(err => console.log(err));
-    } 
+      
+      this.detectFaces();
+      this.detectCelebrities();
 
+    }
   }
 
   onRouteChange = (route) => {
@@ -129,7 +166,7 @@ class App extends Component {
   }
 
   render(){
-    const { isSignedIn, imageURL, route, box, historyList } = this.state;
+    const { isSignedIn, imageURL, route, box, historyList, celebrities } = this.state;
     return (
       <div className="App">
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
@@ -138,7 +175,7 @@ class App extends Component {
               <Logo />
               <Rank name={this.state.user.name} entries={this.state.user.entries}/>
               <FaceRecognition box={box} imageURL={imageURL}/>
-              <Stats box={box}/>
+              <Stats box={box} celebrities={celebrities}/>
               <ImageLinkForm onInputChange={this.onInputChange} onPictureSubmit={this.onPictureSubmit}/>
               <History historyList={historyList} deleteHistory={this.deleteHistory} />
             </div>
