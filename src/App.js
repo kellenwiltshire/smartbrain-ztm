@@ -8,18 +8,23 @@ import SignIn from './components/SignIn/SignIn'
 import Register from './components/Register/Register'
 import Stats from './components/Stats/Stats'
 import Profile from './components/Profile/Profile'
+import Footer from './components/Footer/Footer'
 import { React, Component } from 'react';
 import Clarifai from 'clarifai';
 import { api } from './api/api'
+
+import postgresimg from './assets/postgres.png'
+import reactimg from './assets/react.png'
+import nodeimg from './assets/node.png'
+import githubimg from './assets/github.png'
 
 const app = new Clarifai.App({
   apiKey: api
 });
 
 // TODO - Fix Sign In/Register to respond to 'Enter' Button Press
-// TODO - Add Footer
 // TODO - Login Error Detection and Response
-// TODO - Add Home Route for Nav
+// TODO - Add Tester Login
 // TODO - Arrage Site to work better
 // TODO - Make it Beautiful
 class App extends Component {
@@ -151,6 +156,7 @@ class App extends Component {
     return (
       <div className="App">
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} profileOpened={this.profileOpened} />
+        <Footer postgres={postgresimg} reactimg={reactimg} nodeimg={nodeimg} githubimg={githubimg}/>
         { route === 'home'
           ? <div>
               <Rank name={this.state.user.name} entries={this.state.user.entries}/>
