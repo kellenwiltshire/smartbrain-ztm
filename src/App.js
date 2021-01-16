@@ -17,11 +17,11 @@ const app = new Clarifai.App({
 });
 
 // TODO - Fix Sign In/Register to respond to 'Enter' Button Press
-// TODO - Add More Detection Options with drop-down expansion to include more stats available through Clarifai
 // TODO - Add Profile Page that shows User stats and allows Profile Deletion
 // TODO - Add Footer
 // TODO - Login Error Detection and Response
 // TODO - Add Home Route for Nav
+// TODO - Arrage Site to work better
 // TODO - Make it Beautiful
 class App extends Component {
   constructor(){
@@ -30,7 +30,7 @@ class App extends Component {
       input: '',
       imageURL: '',
       box: [{}],
-      celebrities: [{}],
+      celebrities: [],
       historyList: [],
       route: 'signin',
       isSignedIn: false,
@@ -71,37 +71,13 @@ class App extends Component {
   }
 
   displayFaceBox = (box) => {
-    this.setState({box: [box, ...this.state.box]})
+    if(box){
+      this.setState({box: [box, ...this.state.box]})
+    }
   }
 
   onInputChange = (event) => {
     this.setState({input: event.target.value});
-  }
-
-  detectFaces = () => {
-    app.models.predict(
-      Clarifai.FACE_DETECT_MODEL, 
-      this.state.input)
-    .then(response => {
-      if(response){
-        fetch('http://localhost:3000/image', {
-          method: 'put',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-              id: this.state.user.id
-          })
-        })
-        .then(response => response.json())
-        .then(count => {
-          this.setState(Object.assign(this.state.user, {entries: count}))
-        })
-      }
-      this.setState({box: [{}]})
-      for (let i = 0; i < response.outputs[0].data.regions.length; i++){
-        this.displayFaceBox(this.calculateFaceLocation(response.outputs[0].data.regions[i]))
-      }
-    })
-    .catch(err => console.log(err));
   }
 
   getCelebrities = (celebFace, i) => {
@@ -109,24 +85,16 @@ class App extends Component {
     const celeb = clarifaiCeleb.name;
     const accuracy = clarifaiCeleb.value * 100;
     const roundAccuracy = Math.round(accuracy);
-    return{
-      num: i,
-      celeb: celeb,
-      acc: roundAccuracy
-    }    
+
+    if(roundAccuracy > 80){
+      return celeb;
+    }
   }
 
   setCelebrities = (data) => {
-    if(data.num === 0){
-      if(data.acc > 50) {
-        this.setState({celebrities: [data]})
-      }
-    } else {
-      if(data.acc > 50) {
-        this.setState({celebrities: [data, ...this.state.celebrities]})
-      }
+    if(data){
+      this.setState({celebrities: [data, ...this.state.celebrities]})
     }
-    console.log(this.state.celebrities)
   }
 
   detectCelebrities = () => {
@@ -134,9 +102,12 @@ class App extends Component {
       Clarifai.CELEBRITY_MODEL, 
       this.state.input)
     .then(response => {
-      this.setState({celebrities: [{}]})
+      console.log(response);
+      this.setState({celebrities: []})
+      this.setState({box: [{}]})
       for (let i = 0; i < response.outputs[0].data.regions.length; i++){
         this.setCelebrities(this.getCelebrities(response.outputs[0].data.regions[i], i))
+        this.displayFaceBox(this.calculateFaceLocation(response.outputs[0].data.regions[i]))
       }
     })
     .catch(err => console.log(err));
@@ -149,10 +120,7 @@ class App extends Component {
         imageURL: this.state.input,
         historyList: [this.state.input, ...this.state.historyList],
         })
-      
-      this.detectFaces();
       this.detectCelebrities();
-
     }
   }
 
