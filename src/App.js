@@ -1,6 +1,5 @@
 import './App.css';
 import Navigation from './components/Navigation/Navigation'
-import Logo from './components/Logo/Logo'
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
 import Rank from './components/Rank/Rank'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
@@ -8,6 +7,7 @@ import History from './components/History/History'
 import SignIn from './components/SignIn/SignIn'
 import Register from './components/Register/Register'
 import Stats from './components/Stats/Stats'
+import Profile from './components/Profile/Profile'
 import { React, Component } from 'react';
 import Clarifai from 'clarifai';
 import { api } from './api/api'
@@ -17,7 +17,6 @@ const app = new Clarifai.App({
 });
 
 // TODO - Fix Sign In/Register to respond to 'Enter' Button Press
-// TODO - Add Profile Page that shows User stats and allows Profile Deletion
 // TODO - Add Footer
 // TODO - Login Error Detection and Response
 // TODO - Add Home Route for Nav
@@ -34,6 +33,7 @@ class App extends Component {
       historyList: [],
       route: 'signin',
       isSignedIn: false,
+      profile: false,
       user: {
         id: '',
         name: '',
@@ -124,6 +124,14 @@ class App extends Component {
     }
   }
 
+  profileOpened = () => {
+    if(this.state.profile) {
+      this.setState({profile: false})
+    } else {
+      this.setState({profile: true})
+    }
+  }
+
   onRouteChange = (route) => {
     if (route === 'signout') {
       this.setState({isSignedIn: false});
@@ -139,14 +147,18 @@ class App extends Component {
   }
 
   render(){
-    const { isSignedIn, imageURL, route, box, historyList, celebrities } = this.state;
+    const { isSignedIn, imageURL, route, box, historyList, celebrities, profile } = this.state;
     return (
       <div className="App">
-        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} profileOpened={this.profileOpened} />
         { route === 'home'
           ? <div>
-              <Logo />
               <Rank name={this.state.user.name} entries={this.state.user.entries}/>
+              { profile
+              ? <div>
+                <Profile user={this.state.user} profileOpened={this.profileOpened} onRouteChange={this.onRouteChange}/> </div>
+              : <div></div>
+              }
               <FaceRecognition box={box} imageURL={imageURL}/>
               <Stats box={box} celebrities={celebrities}/>
               <ImageLinkForm onInputChange={this.onInputChange} onPictureSubmit={this.onPictureSubmit}/>

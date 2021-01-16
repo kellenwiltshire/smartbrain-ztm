@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Navigation = ({ onRouteChange, isSignedIn }) => {
+const Navigation = ({ onRouteChange, isSignedIn, profileOpened }) => {
 
     const openCloseMenu = () => {
         const mobileMenuButton = document.getElementById("mobileMenuButton");
@@ -49,7 +49,7 @@ const Navigation = ({ onRouteChange, isSignedIn }) => {
                                                   flex-col md:flex-row
                                                   -translate-y-full md:translate-y-0
                                                   md:mt-1 md:items-center md:mx-1 md:uppercase">
-                <button className="font-bold mx-0 sm:mx-2 my-2 border-b-2 border-transparent hover:border-pink-600 hover:text-pink-700 transition-all duration-500 py-1 sm:p-0">Profile</button>
+                <button onClick={profileOpened} className="font-bold mx-0 sm:mx-2 my-2 border-b-2 border-transparent hover:border-pink-600 hover:text-pink-700 transition-all duration-500 py-1 sm:p-0">Profile</button>
                 <button onClick={() => onRouteChange('signout')} className="font-bold mx-0 sm:mx-2 my-2 border-b-2 border-transparent hover:border-pink-600 hover:text-pink-700 transition-all duration-500 py-1 sm:p-0">Sign Out</button>
             </div>
           
