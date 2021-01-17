@@ -2,9 +2,8 @@ import React from 'react';
 
 const Profile = ({ user, profileOpened, onRouteChange, tester }) => {
 
-    const deleteUser = document.getElementById('deleteUserPop');
-
     const deleteProfilePop = () => {
+        const deleteUser = document.getElementById('deleteUserPop');
         if(deleteUser.style.visibility === 'hidden') {
             deleteUser.style.visibility='visible'
         } else {
