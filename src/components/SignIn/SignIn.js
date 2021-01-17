@@ -5,9 +5,13 @@ class SignIn extends React.Component {
         super();
         this.state = {
             signInEmail: '',
-            signInPassword: ''
+            signInPassword: '',
+            error: false
         }
     }
+
+    errorLogin = document.getElementById('errorLog');
+
     onEmailChange = (event) => {
         this.setState({signInEmail: event.target.value})
     }
@@ -33,9 +37,30 @@ class SignIn extends React.Component {
         .then(user => {
             if(user.id){
                 this.props.loadUser(user);
-                this.props.onRouteChange('home');
+                this.props.onRouteChange('home'); 
+            } else {
+                this.setState({error: true})
             }
+        })  
+    }
+
+    onTesterSignIn = () => {
+        fetch('http://localhost:3000/signin', {
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                email: 'tester@email.com',
+                password: 'tester'
+            })
         })
+        .then(response => response.json())
+        .then(user => {
+            if(user.id){
+                this.props.loadUser(user);
+                this.props.onRouteChange('home');
+                this.props.setTester();
+            }
+        })  
     }
 
     render(){
@@ -61,6 +86,13 @@ class SignIn extends React.Component {
                                 </p>
                             </div>
                         </div>
+                        {
+                            this.state.error
+                            ?   <div id="errorLog" className="text-lg text-center text-red-700">
+                                    Error: Wrong Email or Password
+                                </div>
+                            : <div></div>
+                        } 
                         <div className="mt-8 space-y-6" action="#" method="POST">
                             <input type="hidden" name="remember" value="true" />
                             <div className="rounded-md shadow-sm -space-y-px">
@@ -102,6 +134,11 @@ class SignIn extends React.Component {
                                     Sign in
                                 </button>
                             </div>
+                        </div>
+                        <div>
+                            <p onClick={this.onTesterSignIn} className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer">
+                                I'm Just Here to Test This Out
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -23,8 +23,6 @@ const app = new Clarifai.App({
 });
 
 // TODO - Fix Sign In/Register to respond to 'Enter' Button Press
-// TODO - Login Error Detection and Response
-// TODO - Add Tester Login
 // TODO - Arrage Site to work better
 // TODO - Make it Beautiful
 class App extends Component {
@@ -39,6 +37,7 @@ class App extends Component {
       route: 'signin',
       isSignedIn: false,
       profile: false,
+      tester: false,
       user: {
         id: '',
         name: '',
@@ -107,7 +106,6 @@ class App extends Component {
       Clarifai.CELEBRITY_MODEL, 
       this.state.input)
     .then(response => {
-      console.log(response);
       this.setState({celebrities: []})
       this.setState({box: [{}]})
       for (let i = 0; i < response.outputs[0].data.regions.length; i++){
@@ -137,9 +135,20 @@ class App extends Component {
     }
   }
 
+  setTester = () => {
+    if(this.state.tester){
+      this.setState({tester: false})
+    } else {
+      this.setState({tester: true})
+    }
+    console.log(this.state.tester)
+  }
+
   onRouteChange = (route) => {
     if (route === 'signout') {
       this.setState({isSignedIn: false});
+      this.setState({tester: false})
+      this.setState({profile: false})
     } else if (route === 'home'){
       this.setState({isSignedIn: true})
     }
@@ -152,7 +161,7 @@ class App extends Component {
   }
 
   render(){
-    const { isSignedIn, imageURL, route, box, historyList, celebrities, profile } = this.state;
+    const { isSignedIn, imageURL, route, box, historyList, celebrities, profile, tester } = this.state;
     return (
       <div className="App">
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} profileOpened={this.profileOpened} />
@@ -162,7 +171,7 @@ class App extends Component {
               <Rank name={this.state.user.name} entries={this.state.user.entries}/>
               { profile
               ? <div>
-                <Profile user={this.state.user} profileOpened={this.profileOpened} onRouteChange={this.onRouteChange}/> </div>
+                <Profile user={this.state.user} profileOpened={this.profileOpened} onRouteChange={this.onRouteChange} tester={tester}/> </div>
               : <div></div>
               }
               <FaceRecognition box={box} imageURL={imageURL}/>
@@ -171,7 +180,7 @@ class App extends Component {
               <History historyList={historyList} deleteHistory={this.deleteHistory} />
             </div>
           : ( route === 'signin' || route === 'signout'
-            ? <SignIn onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
+            ? <SignIn onRouteChange={this.onRouteChange} loadUser={this.loadUser} setTester={this.setTester}/>
             : <Register onRouteChange={this.onRouteChange} loadUser={this.loadUser} />
           )
         }
