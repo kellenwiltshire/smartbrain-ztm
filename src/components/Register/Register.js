@@ -49,13 +49,7 @@ class Register extends React.Component {
                 <div className="w-1/2 shadow-2xl flex items-center justify-center bg-white rounded py-12 px-4 sm:px-6 lg:px-8">
                     <div className="max-w-md w-full space-y-8">
                         <div>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-photo" width="150" height="150" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <line x1="15" y1="8" x2="15.01" y2="8" />
-                                <rect x="4" y="4" width="16" height="16" rx="3" />
-                                <path d="M4 15l4 -4a3 5 0 0 1 3 0l5 5" />
-                                <path d="M14 14l1 -1a3 5 0 0 1 3 0l2 2" />
-                            </svg>
+                            <img src={this.props.logo} alt='' />
                             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                                 Register
                             </h2>
