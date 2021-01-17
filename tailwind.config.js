@@ -16,7 +16,7 @@ module.exports = {
       }
     },
     fontFamily:{
-      sans: ['Courier New', 'Courier', 'monospace']
+      sans: ['Roboto', 'monospace']
     }
   },
   variants: {
