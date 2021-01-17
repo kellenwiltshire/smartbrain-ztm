@@ -2,7 +2,7 @@ import React from 'react'
 
 const Rank = ({name, entries}) =>{
     return (
-        <div>
+        <div className="mt-20 col-span-3">
             <div className="text-lg">
                 {`${name}, your current entry count is...`}
             </div>

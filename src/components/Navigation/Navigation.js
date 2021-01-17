@@ -26,7 +26,7 @@ const Navigation = ({ onRouteChange, isSignedIn, profileOpened }) => {
 
     if(isSignedIn) {
         return (
-            <nav className="bg-white shadow fixed max-w-screen-md z-10 mx-auto inset-x-0 top-0 flex justify-between items-center">
+            <nav className="bg-white fixed shadow max-w-screen-md z-10 mx-auto inset-x-0 top-0 flex justify-between items-center">
           
             <button className="font-extrabold m-3 uppercase inline-flex hover:text-pink-700 transition-all duration-500">
               Smartbrain
@@ -57,7 +57,7 @@ const Navigation = ({ onRouteChange, isSignedIn, profileOpened }) => {
         )
     } else {
         return (
-            <nav className="bg-white shadow fixed max-w-screen-md z-10 mx-auto inset-x-0 top-0 flex justify-between items-center">
+            <nav className="bg-white fixed shadow max-w-screen-md z-10 mx-auto inset-x-0 top-0 flex justify-between items-center">
           
             <button className="font-extrabold m-3 uppercase inline-flex hover:text-pink-700 transition-all duration-500">
               Smartbrain

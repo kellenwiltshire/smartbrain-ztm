@@ -2,12 +2,14 @@ import React from 'react';
 
 const Profile = ({ user, profileOpened, onRouteChange, tester }) => {
 
-    const deleteUser = document.getElementById('deleteUser');
+    const deleteUser = document.getElementById('deleteUserPop');
 
-    const deleteWarning = () => {
-        deleteUser.style.visibility === 'hidden'
-        ? deleteUser.style.visibility='visible'
-        : deleteUser.style.visibility='hidden'
+    const deleteProfilePop = () => {
+        if(deleteUser.style.visibility === 'hidden') {
+            deleteUser.style.visibility='visible'
+        } else {
+            deleteUser.style.visibility='hidden'
+        }
     }
 
     const deleteProfile = () => {
@@ -72,11 +74,11 @@ const Profile = ({ user, profileOpened, onRouteChange, tester }) => {
                 
                     <div className="px-5 py-4 flex justify-end">
                     <button className="mt-3 bg-blue-500 font-bold text-white px-2 py-1 transition duration-300 ease-in-out hover:bg-blue-600 mr-6 cursor-pointer" onClick={profileOpened}>Close</button>
-                    <button className="mt-3 bg-red-500 font-bold text-white px-2 py-1 transition duration-300 ease-in-out hover:bg-red-600 mr-6 cursor-pointer" onClick={deleteWarning}>Delete</button>
+                    <button className="mt-3 bg-red-500 font-bold text-white px-2 py-1 transition duration-300 ease-in-out hover:bg-red-600 mr-6 cursor-pointer" onClick={deleteProfilePop}>Delete</button>
                     </div>
                 </div>
                 {/* DELETE Profile POPUP */}
-                <div id="deleteUser" className="absolute md:w-5/12 sm:w-full rounded-lg shadow-lg bg-white my-3" style={{visibility: 'hidden'}}>
+                <div id="deleteUserPop" className="absolute md:w-5/12 sm:w-full rounded-lg shadow-lg bg-white my-3" style={{visibility: 'hidden'}}>
                         <div className="flex justify-between border-b border-gray-100 px-5 py-4">
                             <div>
                         <i className="fa fa-exclamation-triangle text-orange-500"></i>
@@ -92,7 +94,7 @@ const Profile = ({ user, profileOpened, onRouteChange, tester }) => {
                     </div>
                 
                     <div className="px-5 py-4 flex justify-end">
-                    <button className="mt-3 bg-blue-500 font-bold text-white px-2 py-1 transition duration-300 ease-in-out hover:bg-blue-600 mr-6 cursor-pointer" onClick={deleteWarning}>Cancel</button>
+                    <button className="mt-3 bg-blue-500 font-bold text-white px-2 py-1 transition duration-300 ease-in-out hover:bg-blue-600 mr-6 cursor-pointer" onClick={deleteProfilePop}>Cancel</button>
                     <button className="mt-3 bg-red-500 font-bold text-white px-2 py-1 transition duration-300 ease-in-out hover:bg-red-600 mr-6 cursor-pointer" onClick={deleteProfile}>Delete</button>
                     </div>
                 </div>

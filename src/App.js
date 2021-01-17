@@ -17,20 +17,18 @@ import postgresimg from './assets/postgres.png'
 import reactimg from './assets/react.png'
 import nodeimg from './assets/node.png'
 import githubimg from './assets/github.png'
+import brain from './assets/brain.png'
 
 const app = new Clarifai.App({
   apiKey: api
 });
 
-// TODO - Fix Sign In/Register to respond to 'Enter' Button Press
-// TODO - Arrage Site to work better
-// TODO - Make it Beautiful
 class App extends Component {
   constructor(){
     super();
     this.state = {
       input: '',
-      imageURL: '',
+      imageURL: brain,
       box: [{}],
       celebrities: [],
       historyList: [],
@@ -106,6 +104,19 @@ class App extends Component {
       Clarifai.CELEBRITY_MODEL, 
       this.state.input)
     .then(response => {
+      if(response){
+        fetch('http://localhost:3000/image', {
+          method: 'put',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+              id: this.state.user.id
+          })
+        })
+        .then(response => response.json())
+        .then(count => {
+          this.setState(Object.assign(this.state.user, {entries: count}))
+        })
+      }
       this.setState({celebrities: []})
       this.setState({box: [{}]})
       for (let i = 0; i < response.outputs[0].data.regions.length; i++){
@@ -130,6 +141,7 @@ class App extends Component {
   profileOpened = () => {
     if(this.state.profile) {
       this.setState({profile: false})
+
     } else {
       this.setState({profile: true})
     }
@@ -172,12 +184,13 @@ class App extends Component {
               { profile
               ? <div>
                 <Profile user={this.state.user} profileOpened={this.profileOpened} onRouteChange={this.onRouteChange} tester={tester}/> </div>
-              : <div></div>
+              : <div className="grid-cols-2 grid-rows-6 grid">
+                  <ImageLinkForm onInputChange={this.onInputChange} onPictureSubmit={this.onPictureSubmit}/>
+                  <Stats  box={box} celebrities={celebrities}/>
+                  <History historyList={historyList} deleteHistory={this.deleteHistory} />
+                  <FaceRecognition  box={box} imageURL={imageURL}/>
+                </div>
               }
-              <FaceRecognition box={box} imageURL={imageURL}/>
-              <Stats box={box} celebrities={celebrities}/>
-              <ImageLinkForm onInputChange={this.onInputChange} onPictureSubmit={this.onPictureSubmit}/>
-              <History historyList={historyList} deleteHistory={this.deleteHistory} />
             </div>
           : ( route === 'signin' || route === 'signout'
             ? <SignIn onRouteChange={this.onRouteChange} loadUser={this.loadUser} setTester={this.setTester}/>

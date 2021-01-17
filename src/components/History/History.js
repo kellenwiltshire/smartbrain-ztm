@@ -18,12 +18,9 @@ const History = ({ historyList, deleteHistory }) => {
     }
 
     return(
-        <div className="flex justify-center flex-wrap">
-            <div className="text-white w-full flex flex-col justify-center">
+        <div className="col-start-1 h-auto px-10 rounded shadow-2xl w-2/3 self-center place-self-center pb-10">
+            <div className="w-full flex flex-col justify-center">
                 <h1 className="text-4xl">History</h1>
-                <div>
-                <button className="bg-blue-500 font-bold text-white px-2 py-1 transition duration-300 ease-in-out hover:bg-blue-600 cursor-pointer" onClick={deleteWarning}>Delete History</button>
-                </div>
             </div>
 
             <div className="min-w-500">
@@ -36,6 +33,9 @@ const History = ({ historyList, deleteHistory }) => {
                         />)
                     })
                 }
+            </div>
+            <div className="pt-2">
+                <button className="bg-blue-500 font-bold text-white px-2 py-1 transition duration-300 ease-in-out hover:bg-blue-600 cursor-pointer" onClick={deleteWarning}>Delete History</button>
             </div>
             {/* DELETE HISTORY POPUP */}
             <div id="delete" className="absolute md:w-1/3 sm:w-full rounded-lg shadow-lg bg-white my-3" style={{visibility: 'hidden'}}>
