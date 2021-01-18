@@ -23,7 +23,7 @@ const History = ({ historyList, deleteHistory }) => {
                 <h1 className="text-4xl">History</h1>
             </div>
 
-            <div className="min-w-500">
+            <div className="w-auto">
                 {
                     historyList.map((historyList, i) => {
                         return(

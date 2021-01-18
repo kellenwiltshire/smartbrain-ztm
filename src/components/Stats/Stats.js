@@ -2,7 +2,7 @@ import React from 'react';
 
 const Stats = ({ box, celebrities }) => {
 
-    const celebs = celebrities.map((celebrities) => <li>{celebrities}</li>)
+    const celebs = celebrities.map((celebrities) => <li>-{celebrities}</li>)
 
     return (
         <div className="col-start-1 h-auto mb-4 rounded shadow-2xl w-2/3 self-center place-self-center">
