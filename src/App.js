@@ -10,18 +10,12 @@ import Stats from './components/Stats/Stats'
 import Profile from './components/Profile/Profile'
 import Footer from './components/Footer/Footer'
 import { React, Component } from 'react';
-import Clarifai from 'clarifai';
-import { api } from './api/api'
 
 import postgresimg from './assets/postgres.png'
 import reactimg from './assets/react.png'
 import nodeimg from './assets/node.png'
 import githubimg from './assets/github.png'
 import brain from './assets/brain.png'
-
-const app = new Clarifai.App({
-  apiKey: api
-});
 
 const initialState= {
   input: '',
@@ -101,33 +95,14 @@ class App extends Component {
     }
   }
 
-  detectCelebrities = () => {
-    app.models.predict(
-      Clarifai.CELEBRITY_MODEL, 
-      this.state.input)
-    .then(response => {
-      if(response){
-        fetch('http://localhost:3000/image', {
-          method: 'put',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-              id: this.state.user.id
-          })
-        })
-        .then(response => response.json())
-        .then(count => {
-          this.setState(Object.assign(this.state.user, {entries: count}))
-        })
-        .catch(console.log)
-      }
-      this.setState({celebrities: []})
-      this.setState({box: [{}]})
+  detectCelebrities = (response) => {
+      this.setState({celebrities: initialState.celebrities})
+      this.setState({box: initialState.box})
+      console.log(response);
       for (let i = 0; i < response.outputs[0].data.regions.length; i++){
         this.setCelebrities(this.getCelebrities(response.outputs[0].data.regions[i], i))
         this.displayFaceBox(this.calculateFaceLocation(response.outputs[0].data.regions[i]))
       }
-    })
-    .catch(err => console.log(err));
   }
 
   onPictureSubmit = () => {
@@ -137,7 +112,33 @@ class App extends Component {
         imageURL: this.state.input,
         historyList: [this.state.input, ...this.state.historyList],
         })
-      this.detectCelebrities();
+
+        fetch('http://localhost:3000/imageurl', {
+          method: 'post',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            input: this.state.input
+          })
+        })
+        .then(response => response.json())
+        .then(response => {
+          if(response){
+            fetch('http://localhost:3000/image', {
+              method: 'put',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                  id: this.state.user.id
+              })
+            })
+            .then(response => response.json())
+            .then(count => {
+              this.setState(Object.assign(this.state.user, {entries: count}))
+            })
+            .catch(console.log)
+          }
+        this.detectCelebrities(response);
+        })
+        .catch(err => console.log(err));
     }
   }
 

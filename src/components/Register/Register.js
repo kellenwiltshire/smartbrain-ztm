@@ -37,9 +37,11 @@ class Register extends React.Component {
         })
         .then(response => response.json())
         .then(user => {
-            if(user){
+            if(user.id){
                 this.props.loadUser(user);
                 this.props.onRouteChange('home');
+            } else {
+                this.setState({error: true})
             }
         })
     }
@@ -54,6 +56,13 @@ class Register extends React.Component {
                                 Register
                             </h2>
                         </div>
+                        {
+                            this.state.error
+                            ?   <div id="errorLog" className="text-lg text-center text-red-700">
+                                    Error: Must Enter All Information
+                                </div>
+                            : <div></div>
+                        }
                     <div className="mt-8 space-y-6" action="#" method="POST">
                         <input type="hidden" name="remember" value="true" />
                             <div className="rounded-md shadow-sm -space-y-px">
