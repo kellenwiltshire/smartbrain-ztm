@@ -17,6 +17,7 @@ import nodeimg from './assets/node.png';
 import githubimg from './assets/github.png';
 import brain from './assets/brain.png';
 
+//Initial State is set for each new session
 const initialState = {
 	input: '',
 	imageURL: brain,
@@ -41,7 +42,7 @@ class App extends Component {
 		super();
 		this.state = initialState;
 	}
-
+  //loads the user data from the Database into the App
 	loadUser = (data) => {
 		this.setState({
 			user: {
@@ -54,6 +55,7 @@ class App extends Component {
 		});
 	};
 
+  //Some math to determine where the box around the face should go
 	calculateFaceLocation = (data) => {
 		const clarifaiFace = data.region_info.bounding_box;
 		const image = document.getElementById('inputimage');
@@ -76,8 +78,9 @@ class App extends Component {
 
 	onInputChange = (event) => {
 		this.setState({ input: event.target.value });
-	};
-
+  };
+  
+  //Checks to make sure a Celebrity is in the photo to deter false positives. Requires 80% accuracy
 	getCelebrities = (celebFace, i) => {
 		const clarifaiCeleb = celebFace.data.concepts[0];
 		const celeb = clarifaiCeleb.name;
@@ -89,6 +92,7 @@ class App extends Component {
 		}
 	};
 
+  //Pushes the Celebrities into the Array
 	setCelebrities = (data) => {
 		if (data) {
 			this.setState({ celebrities: [data, ...this.state.celebrities] });
@@ -109,6 +113,7 @@ class App extends Component {
 		}
 	};
 
+  //Communicates with the Backend to get the image data info to display
 	onPictureSubmit = () => {
 		if (this.state.input !== '') {
 			this.setState({
@@ -164,6 +169,7 @@ class App extends Component {
 		console.log(this.state.tester);
 	};
 
+  //Route setting
 	onRouteChange = (route) => {
 		if (route === 'signout') {
 			this.setState(initialState);
