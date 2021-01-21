@@ -17,7 +17,7 @@ const History = ({ historyList, deleteHistory }) => {
 	};
 
 	return (
-		<div className='col-start-1 row-start-3 max-h-36 overflow-y-scroll px-10 rounded shadow-2xl w-2/3 self-center place-self-center pb-10'>
+		<div className='col-start-1 row-start-3 max-h-36 overflow-y-scroll px-10 rounded border-2 sm:border-0 border-black sm:shadow-2xl w-2/3 self-center place-self-center pb-10'>
 			{/* DELETE HISTORY POPUP */}
 			<div
 				id='delete'
@@ -58,7 +58,7 @@ const History = ({ historyList, deleteHistory }) => {
 				</div>
 			</div>
 			<div className='w-full flex flex-col justify-center'>
-				<h1 className='text-4xl'>History</h1>
+				<h1 className='text-xl sm:text-4xl'>History</h1>
 			</div>
 
 			<div className='w-auto'>
@@ -68,7 +68,7 @@ const History = ({ historyList, deleteHistory }) => {
 			</div>
 			<div className='pt-2'>
 				<button
-					className='bg-blue-500 font-bold text-white px-2 py-1 transition duration-300 ease-in-out hover:bg-blue-600 cursor-pointer'
+					className='bg-green-500 font-bold text-white px-2 rounded transition duration-300 ease-in-out hover:bg-green-700 cursor-pointer'
 					onClick={deleteWarning}
 				>
 					Delete History
