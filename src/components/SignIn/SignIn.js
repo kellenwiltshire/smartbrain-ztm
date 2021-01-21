@@ -65,8 +65,8 @@ class SignIn extends React.Component {
 	render() {
 		const { onRouteChange, logo } = this.props;
 		return (
-			<div className='flex justify-center mt-24'>
-				<div className='w-1/2 shadow-2xl flex items-center justify-center bg-white rounded py-12 px-4 sm:px-6 lg:px-8'>
+			<div className='flex justify-center mt-12 mb-12 sm:mt-24 '>
+				<div className='w-full sm:w-1/2 shadow-2xl flex items-center justify-center bg-white rounded py-12 px-4 sm:px-6 lg:px-8'>
 					<div className='max-w-md w-full space-y-8'>
 						<div>
 							<img src={logo} alt='' />
