@@ -11,7 +11,7 @@ const Profile = ({ user, profileOpened, onRouteChange, tester }) => {
 	};
 
 	const deleteProfile = () => {
-		fetch(`http://localhost:3000/profile/:${user.id}`, {
+		fetch(`https://still-atoll-67781.herokuapp.com/profile/:${user.id}`, {
 			method: 'delete',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
