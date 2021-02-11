@@ -8,7 +8,8 @@ const Footer = ({ postgres, reactimg, nodeimg, githubimg }) => {
 				<img src={githubimg} alt='Github' />{' '}
 			</a>
 			<h1>
-				Designed By <a href='#'>Kellen Wiltshire</a> using{' '}
+				Designed By <a href='https://kellenwiltshire.com/'>Kellen Wiltshire</a>{' '}
+				using{' '}
 			</h1>
 			<img src={postgres} alt='postgres svg' />
 			<img src={reactimg} alt='react svg' />
